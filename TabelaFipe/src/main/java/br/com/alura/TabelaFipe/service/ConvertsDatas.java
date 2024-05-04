@@ -2,6 +2,9 @@ package br.com.alura.TabelaFipe.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
+
+import java.util.List;
 
 public class ConvertsDatas implements IConvertsDatas{
     private ObjectMapper mapper = new ObjectMapper();
@@ -14,4 +17,18 @@ public class ConvertsDatas implements IConvertsDatas{
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public <T> List<T> takeList(String json, Class<T> tClass) {
+        CollectionType list = mapper.getTypeFactory()
+                .constructCollectionType(List.class, tClass);
+
+        try {
+            return mapper.readValue(json, list);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
 }
